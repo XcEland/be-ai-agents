@@ -1,0 +1,23 @@
+[project]
+name = "kundai"
+version = "0.1.0"
+description = "kundAI using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.157.0,<1.0.0"
+]
+
+[project.scripts]
+kundai = "kundai.main:run"
+run_crew = "kundai.main:run"
+train = "kundai.main:train"
+replay = "kundai.main:replay"
+test = "kundai.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
