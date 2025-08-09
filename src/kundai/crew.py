@@ -1,4 +1,5 @@
-from crewai import Agent, Crew, Process, Task
+import os
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai_tools import SerperDevTool
@@ -10,9 +11,21 @@ from typing import List
 @CrewBase
 class Kundai():
     """Kundai crew"""
-
+    
     agents: List[BaseAgent]
     tasks: List[Task]
+
+    llm = LLM(
+    # include the watsonx_text provider in the model string
+        provider="watsonx_text",                       # explicit provider
+        model=os.getenv("MODEL", "ibm/granite-3-8b-instruct"),  # no provider prefix here
+        base_url=os.getenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com"),
+        api_key=os.getenv("WATSONX_APIKEY"),
+        project_id=os.getenv("WATSONX_PROJECT_ID"),
+        max_new_token=1024,
+        temperature=0.7
+    )
+
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -20,20 +33,24 @@ class Kundai():
     
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
+
     @agent
     def researcher(self) -> Agent:
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
+            llm=self.llm,
             verbose=True,
             tools=[
                 SerperDevTool()
             ]
         )
 
+
     @agent
     def reporting_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config['reporting_analyst'], # type: ignore[index]
+            llm=self.llm,
             verbose=True
         )
 
