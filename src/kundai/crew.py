@@ -11,7 +11,7 @@ from typing import List
 @CrewBase
 class Kundai():
     """Kundai crew"""
-    
+
     agents: List[BaseAgent]
     tasks: List[Task]
 
@@ -22,7 +22,7 @@ class Kundai():
         base_url=os.getenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com"),
         api_key=os.getenv("WATSONX_APIKEY"),
         project_id=os.getenv("WATSONX_PROJECT_ID"),
-        max_new_token=1024,
+        max_new_token=2024,
         temperature=0.7
     )
 
